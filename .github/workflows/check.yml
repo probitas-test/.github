@@ -1,7 +1,7 @@
 name: check
 
 env:
-  DENO_VERSION: 1.x
+  DENO_VERSION: 2.x
 
 on:
   push:
@@ -9,12 +9,23 @@ on:
       - main
   pull_request:
 
+# A pull request only needs its latest commit checked. A run on main waits for
+# the one before it to finish instead of stopping it.
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
 jobs:
   format:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: denoland/setup-deno@main
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: denoland/setup-deno@v2
         with:
           deno-version: ${{ env.DENO_VERSION }}
       - name: format
@@ -22,8 +33,14 @@ jobs:
 
   misspell:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # reviewdog reports its findings as a check run.
+      checks: write
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - name: misspell
         uses: reviewdog/action-misspell@v1
         with:
