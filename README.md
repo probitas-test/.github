@@ -1,8 +1,8 @@
 # .github
 
-[![check](https://github.com/vim-denops/.github/actions/workflows/check.yml/badge.svg)](https://github.com/vim-denops/.github/actions/workflows/check.yml)
+[![check](https://github.com/probitas-test/.github/actions/workflows/check.yml/badge.svg)](https://github.com/probitas-test/.github/actions/workflows/check.yml)
 
-jsr-probitas community health files
+probitas-test community health files
 
 ## License
 
